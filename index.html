@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Они придумали Интернет</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&amp;display=swap');
+        
+        :root {
+            --neon-cyan: #00f3ff;
+            --neon-pink: #ff00aa;
+            --neon-green: #39ff14;
+        }
+        
+        .tail-container {
+            font-family: 'Press Start 2P', system-ui;
+        }
+        
+        .neon-text {
+            text-shadow: 
+                0 0 10px var(--neon-cyan),
+                0 0 20px var(--neon-cyan),
+                0 0 40px var(--neon-pink);
+        }
+        
+        .neon-text-pink {
+            text-shadow: 
+                0 0 10px var(--neon-pink),
+                0 0 20px var(--neon-pink),
+                0 0 40px var(--neon-cyan);
+        }
+        
+        .scanline {
+            position: relative;
+        }
+        
+        .scanline::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                transparent 50%,
+                rgba(0, 243, 255, 0.035) 50%
+            );
+            background-size: 100% 6px;
+            pointer-events: none;
+            animation: scan 4s linear infinite;
+            z-index: 2;
+        }
+        
+        @keyframes scan {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 600px; }
+        }
+        
+        .glitch {
+            position: relative;
+            animation: glitch-skew 4s infinite linear alternate-reverse;
+        }
+        
+        @keyframes glitch-skew {
+            0% { transform: skew(0deg); }
+            10% { transform: skew(2deg); }
+            20% { transform: skew(-2deg); }
+            100% { transform: skew(0deg); }
+        }
+        
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-15px) scale(1.05);
+            box-shadow: 0 0 30px -5px rgb(0 243 255);
+        }
+        
+        .terminal {
+            font-family: monospace;
+            background: rgba(0, 20, 40, 0.85);
+            border: 2px solid #00f3ff;
+        }
+        
+        .section-header {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-header::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(to right, #00f3ff, #ff00aa);
+            box-shadow: 0 0 15px #00f3ff;
+        }
+        
+        .bio-line {
+            height: 2px;
+            background: linear-gradient(to right, transparent, #39ff14, transparent);
+        }
+        
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(rgba(57, 255, 20, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(57, 255, 20, 0.02) 1px, transparent 1px);
+            background-size: 80px 80px;
+            pointer-events: none;
+            z-index: -1;
+            animation: matrixMove 25s linear infinite;
+        }
+        
+        @keyframes matrixMove {
+            0% { background-position: 0 0; }
+            100% { background-position: -80px -80px; }
+        }
+        
+        .hero-canvas {
+            filter: contrast(120%) brightness(110%);
+        }
+    </style>
+</head>
+<body class="tail-container bg-zinc-950 text-zinc-200 overflow-x-hidden">
+    <!-- BACKGROUND MATRIX -->
+    <div class="matrix-bg"></div>
+
+    <!-- NAVBAR -->
+    <nav class="fixed top-0 left-0 right-0 z-50 border-b border-cyan-500/30 bg-zinc-950/80 backdrop-blur-lg">
+        <div class="max-w-screen-2xl mx-auto px-8 py-5 flex items-center justify-between">
+            <!-- LOGO -->
+            <div class="flex items-center gap-x-3">
+                <div class="w-9 h-9 bg-gradient-to-br from-cyan-400 to-pink-500 rounded flex items-center justify-center text-white text-2xl leading-none pt-1 shadow-[0_0_15px_-3px] shadow-pink-500">🌐</div>
+                <div>
+                    <span class="text-2xl font-bold tracking-tighter neon-text text-cyan-300">ОНИ</span>
+                    <span class="text-2xl font-bold tracking-tighter neon-text-pink">ПРИДУМАЛИ</span>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-x-8 text-sm">
+                <a href="#intro" onclick="smoothScrollTo('intro')" 
+                   class="hover:text-cyan-400 transition-colors flex items-center gap-x-1">
+                    <span class="text-cyan-400">01</span>
+                    <span>ВВЕДЕНИЕ</span>
+                </a>
+                <a href="#monument" onclick="smoothScrollTo('monument')" 
+                   class="hover:text-cyan-400 transition-colors flex items-center gap-x-1">
+                    <span class="text-cyan-400">02</span>
+                    <span>ПАМЯТНИК</span>
+                </a>
+                <a href="#pioneers" onclick="smoothScrollTo('pioneers')" 
+                   class="hover:text-cyan-400 transition-colors flex items-center gap-x-1">
+                    <span class="text-cyan-400">03</span>
+                    <span>ПИОНЕРЫ</span>
+                </a>
+                <a href="#history" onclick="smoothScrollTo('history')" 
+                   class="hover:text-cyan-400 transition-colors flex items-center gap-x-1">
+                    <span class="text-cyan-400">04</span>
+                    <span>ИСТОРИЯ</span>
+                </a>
+            </div>
+            
+            <div class="flex items-center gap-x-4">
+                <div onclick="toggleSound()" 
+                     class="w-8 h-8 flex items-center justify-center border border-pink-400 text-pink-400 hover:bg-pink-400 hover:text-zinc-950 transition-all rounded cursor-pointer">
+                    <svg id="sound-icon" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707A1 1 0 0113 6v12a1 1 0 01-1.707.707L5.586 15z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a4 4 0 00-8 0" />
+                    </svg>
+                </div>
+                <button onclick="window.location.reload()" 
+                        class="px-6 py-2.5 text-xs border border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-zinc-950 transition-all rounded-full flex items-center gap-x-2">
+                    <span class="relative flex h-3 w-3">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-3 w-3 bg-cyan-400"></span>
+                    </span>
+                    <span>REBOOT</span>
+                </button>
+            </div>
+        </div>
+        
+        <!-- SUB NAV -->
+        <div class="h-px bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent"></div>
+    </nav>
+
+    <!-- HERO -->
+    <header class="relative min-h-screen flex items-center justify-center pt-16 overflow-hidden">
+        <!-- CANVAS BACKGROUND -->
+        <canvas id="hero-canvas" class="hero-canvas absolute inset-0 z-0"></canvas>
+        
+        <!-- OVERLAY GRID -->
+        <div class="absolute inset-0 bg-[radial-gradient(#00f3ff_0.8px,transparent_0.8px)] bg-[length:60px_60px] opacity-10 z-10"></div>
+        
+        <div class="relative z-20 max-w-screen-2xl mx-auto px-8 grid grid-cols-12 gap-8 items-center">
+            <div class="col-span-12 lg:col-span-7">
+                <div class="max-w-2xl">
+                    <!-- BADGE -->
+                    <div class="inline-flex items-center gap-x-2 border border-pink-400/60 text-pink-400 text-[10px] tracking-[2px] px-5 py-3 rounded-3xl mb-8 scanline">
+                        <div class="w-2 h-2 bg-pink-400 rounded-full animate-pulse"></div>
+                        NET-1984 PROTOCOL
+                    </div>
+                    
+                    <!-- MAIN TITLE -->
+                    <h1 class="text-7xl md:text-8xl font-bold leading-none tracking-tighter neon-text text-white mb-2 glitch">
+                        ОНИ<br>ПРИДУМАЛИ
+                    </h1>
+                    <h1 class="text-7xl md:text-8xl font-bold leading-none tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-pink-400 mb-8">
+                        ИНТЕРНЕТ
+                    </h1>
+                    
+                    <div class="flex items-center gap-x-4 mb-12">
+                        <div class="h-px w-12 bg-cyan-400"></div>
+                        <div class="uppercase text-xs tracking-widest text-cyan-300">1984 — 2024 • CYBER LEGACY</div>
+                        <div class="h-px flex-1 bg-gradient-to-r from-cyan-400 to-transparent"></div>
+                    </div>
+                    
+                    <p class="max-w-md text-zinc-400 text-lg leading-relaxed mb-12">
+                        История создания глобальной сети в неоновом свете. 
+                        Встречайте тех, кто соединил мир.
+                    </p>
+                    
+                    <div class="flex items-center gap-x-6">
+                        <button onclick="smoothScrollTo('pioneers')" 
+                                class="px-10 py-6 bg-white text-zinc-950 font-bold flex items-center gap-x-4 group transition-all hover:shadow-[0_0_30px_-5px] hover:shadow-pink-500">
+                            <span class="text-xl">ПРОДОЛЖИТЬ</span>
+                            <span class="block w-8 h-px bg-zinc-950 group-active:w-12 transition-all"></span>
+                        </button>
+                        
+                        <div onclick="showInfoModal()" 
+                             class="cursor-pointer border border-white/40 hover:border-white/80 transition-colors w-14 h-14 rounded-2xl flex items-center justify-center text-3xl">
+                            ℹ
+                        </div>
+                    </div>
+                    
+                    <!-- STATS -->
+                    <div class="mt-20 grid grid-cols-3 gap-8 text-center">
+                        <div>
+                            <div class="text-4xl font-bold text-cyan-300">1969</div>
+                            <div class="text-xs text-zinc-500 tracking-widest">АРПАНЕТ</div>
+                        </div>
+                        <div>
+                            <div class="text-4xl font-bold text-pink-300">1989</div>
+                            <div class="text-xs text-zinc-500 tracking-widest">WWW</div>
+                        </div>
+                        <div>
+                            <div class="text-4xl font-bold text-emerald-300">4.9B</div>
+                            <div class="text-xs text-zinc-500 tracking-widest">ПОЛЬЗОВАТЕЛЕЙ</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- RIGHT SIDE VISUAL -->
+            <div class="col-span-12 lg:col-span-5 relative">
+                <div class="relative">
+                    <!-- HOLOGRAPHIC ORB -->
+                    <div class="w-80 h-80 mx-auto relative">
+                        <!-- orb -->
+                        <div class="absolute inset-0 bg-gradient-to-br from-cyan-400/10 to-pink-400/10 rounded-[100%] flex items-center justify-center border border-cyan-300/30 shadow-[0_0_80px_30px] shadow-cyan-400/30">
+                            <!-- inner orb -->
+                            <div class="w-52 h-52 bg-zinc-900 rounded-[100%] flex items-center justify-center relative overflow-hidden">
+                                <!-- globe lines -->
+                                <div class="absolute inset-4 border border-cyan-300/40 rounded-[100%] rotate-12"></div>
+                                <div class="absolute inset-12 border border-pink-300/40 rounded-[100%] -rotate-12"></div>
+                                
+                                <!-- center node -->
+                                <div class="w-6 h-6 bg-white rounded-full flex items-center justify-center z-10">
+                                    <div class="w-3 h-3 bg-pink-400 rounded-full animate-ping absolute"></div>
+                                    <div class="w-3 h-3 bg-cyan-400 rounded-full relative"></div>
+                                </div>
+                                
+                                <!-- orbiting dots -->
+                                <div class="absolute top-6 left-1/2 w-3 h-3 bg-cyan-400 rounded-full animate-[spin_8s_linear_infinite]"></div>
+                                <div class="absolute bottom-12 right-8 w-3 h-3 bg-pink-400 rounded-full animate-[spin_12s_linear_infinite] animation-delay-300"></div>
+                                <div class="absolute top-1/3 right-4 w-3 h-3 bg-emerald-400 rounded-full animate-[spin_15s_linear_infinite] animation-delay-700"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- label -->
+                        <div class="absolute -bottom-6 left-1/2 -translate-x-1/2 bg-zinc-900 border border-pink-400 text-pink-400 text-xs px-8 py-3 rounded-3xl whitespace-nowrap flex items-center gap-x-3">
+                            <div class="w-px h-4 bg-pink-400"></div>
+                            ПЕРВЫЙ УЗЕЛ
+                            <div class="w-px h-4 bg-pink-400"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- floating labels -->
+                    <div class="absolute top-12 -left-6 bg-zinc-900/90 text-cyan-300 text-[10px] px-4 py-1 rounded border border-cyan-400/60 rotate-[-8deg]">
+                        TCP/IP
+                    </div>
+                    <div class="absolute bottom-20 -right-8 bg-zinc-900/90 text-pink-300 text-[10px] px-4 py-1 rounded border border-pink-400/60 rotate-[12deg]">
+                        HTTP 1.0
+                    </div>
+                    <div class="absolute top-1/2 right-12 bg-zinc-900/90 text-emerald-300 text-[10px] px-4 py-1 rounded border border-emerald-400/60 -rotate-[20deg]">
+                        HTML
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- SCROLL INDICATOR -->
+        <div class="absolute bottom-12 left-1/2 flex flex-col items-center gap-y-3 z-30">
+            <div class="text-[10px] tracking-[3px] text-zinc-400">ПРОКРУТИТЬ</div>
+            <div class="w-px h-12 bg-gradient-to-b from-transparent via-cyan-300 to-transparent"></div>
+        </div>
+        
+        <!-- FOOTER BAR -->
+        <div class="absolute bottom-0 left-0 right-0 h-16 bg-black/60 flex items-center px-8 text-xs z-30 border-t border-cyan-500/20">
+            <div class="flex-1 flex items-center gap-x-8">
+                <div class="flex items-center gap-x-5">
+                    <div class="px-3 py-1 bg-cyan-900/30 text-cyan-400 text-[10px] rounded">v0.8.4</div>
+                    <div class="px-3 py-1 bg-pink-900/30 text-pink-400 text-[10px] rounded">CYBERPUNK MODE</div>
+                </div>
+            </div>
+            <div class="text-zinc-500 text-xs flex items-center gap-x-8">
+                <a href="#" onclick="event.preventDefault();showCredits()" class="hover:text-zinc-300">КРЕДИТЫ</a>
+                <a href="#" onclick="event.preventDefault()" class="hover:text-zinc-300">АРХИВ</a>
+                <a href="#" onclick="event.preventDefault()" class="hover:text-zinc-300">СКАЧАТЬ ТОРРЕНТ</a>
+            </div>
+        </div>
+        
+        <!-- CORNER DECOR -->
+        <div class="absolute top-8 right-8 font-mono text-[140px] font-black text-cyan-900/10 leading-none select-none">01</div>
+    </header>
+
+    <!-- INTRO SECTION -->
+    <section id="intro" class="relative py-24 border-t border-b border-cyan-400/10 bg-zinc-950">
+        <div class="max-w-screen-2xl mx-auto px-8">
+            <div class="grid grid-cols-12 gap-x-16">
+                <!-- LEFT COL -->
+                <div class="col-span-12 lg:col-span-5">
+                    <div class="sticky top-28">
+                        <div class="uppercase text-xs text-pink-400 tracking-widest mb-3">01 • ВВЕДЕНИЕ</div>
+                        <h2 class="text-5xl leading-none font-bold neon-text mb-10">
+                            ЛЮДИ, БЛАГОДАРЯ КОТОРЫМ ПОЯВИЛАСЬ<br>
+                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-cyan-200">ГЛОБАЛЬНАЯ КОМПЬЮТЕРНАЯ СЕТЬ</span>
+                        </h2>
+                        
+                        <div class="terminal p-6 text-cyan-200 text-sm leading-relaxed max-w-xs">
+                            &gt; ping 192.168.1.1<br>
+                            &gt; connected to the grid...<br>
+                            &gt; loading history.dat
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- RIGHT COL -->
+                <div class="col-span-12 lg:col-span-7">
+                    <div class="prose prose-invert max-w-none text-zinc-300 text-[15.2px] leading-relaxed">
+                        <p class="mb-8">
+                            Глобальная компьютерная сеть – это, без преувеличения, главный технологический прорыв последних десятилетий. 
+                            Интернет – всемирная система, состоящая из объединенных компьютерных сетей на базе протокола TCP/IP. 
+                            Это невероятное изобретение 20 века с последующим развитием в 21 веке. Сейчас Интернет – это не просто сеть, 
+                            а целая информационная вселенная, подчиняющаяся техническим, социальным и государственным законам в различных ее частях. 
+                            Но кем и когда она была изобретена? На самом деле изобретение Интернета – довольно запутанная история.
+                        </p>
+                        
+                        <div class="my-16 h-px bg-gradient-to-r from-transparent via-pink-400/30 to-transparent"></div>
+                        
+                        <div class="flex gap-6 items-center">
+                            <div class="flex-1">
+                                <div class="text-xs text-zinc-400 mb-1">ПЕРВЫЙ ПАКЕТ ОТПРАВЛЕН</div>
+                                <div class="text-6xl font-bold text-emerald-300">29.10.69</div>
+                            </div>
+                            <div class="text-8xl text-pink-500/20 font-black">ARPANET</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MONUMENT SECTION -->
+    <section id="monument" class="relative py-28 bg-black">
+        <div class="max-w-screen-2xl mx-auto px-8">
+            <div class="flex flex-col lg:flex-row gap-16 items-center">
+                <!-- VISUAL -->
+                <div class="flex-1">
+                    <div class="relative group">
+                        <!-- monument frame -->
+                        <div class="border-4 border-cyan-400/70 p-4 bg-zinc-900 shadow-2xl shadow-pink-500/30 transition-all group-hover:shadow-pink-500/60">
+                            <!-- monument content -->
+                            <div class="aspect-video bg-zinc-950 flex items-center justify-center relative overflow-hidden">
+                                <!-- simulated monument -->
+                                <div class="relative w-60">
+                                    <!-- base -->
+                                    <div class="h-6 bg-gradient-to-r from-amber-900 to-amber-700 mx-auto w-52 rounded"></div>
+                                    
+                                    <!-- pillar -->
+                                    <div class="mx-auto w-6 h-72 bg-gradient-to-t from-slate-400 to-slate-200 relative">
+                                        <!-- neon ring -->
+                                        <div class="absolute -top-4 left-1/2 -translate-x-1/2 w-14 h-14 border-4 border-pink-400 rounded-full flex items-center justify-center">
+                                            <div class="w-6 h-6 bg-cyan-400 rounded-full shadow-[0_0_20px_8px] shadow-cyan-400 animate-pulse"></div>
+                                        </div>
+                                        
+                                        <!-- vertical lines -->
+                                        <div class="absolute left-1/2 top-12 bottom-12 w-px bg-cyan-300"></div>
+                                        <div class="absolute left-2 top-12 bottom-12 w-px bg-pink-300"></div>
+                                        <div class="absolute right-2 top-12 bottom-12 w-px bg-emerald-300"></div>
+                                        
+                                        <!-- data nodes -->
+                                        <div class="absolute top-1/4 left-1/2 w-3 h-3 -translate-x-1/2 rounded-full border border-white bg-black"></div>
+                                        <div class="absolute top-1/2 left-1/2 w-3 h-3 -translate-x-1/2 rounded-full border border-white bg-black"></div>
+                                        <div class="absolute top-3/4 left-1/2 w-3 h-3 -translate-x-1/2 rounded-full border border-white bg-black"></div>
+                                    </div>
+                                    
+                                    <!-- top orb -->
+                                    <div class="mx-auto relative -mt-8">
+                                        <div onclick="pulseMonument(this)" 
+                                             class="w-28 h-28 bg-gradient-to-br from-cyan-300 to-violet-400 rounded-full flex items-center justify-center cursor-pointer shadow-[0_0_45px_25px] shadow-cyan-400">
+                                            <div class="w-20 h-20 bg-zinc-950 rounded-full flex items-center justify-center">
+                                                <span class="text-5xl">🛰️</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- floating labels -->
+                                <div class="absolute top-8 left-8 text-xs bg-black/70 px-4 py-1 border border-cyan-400 text-cyan-300 rotate-[-12deg]">
+                                    INTERNET
+                                </div>
+                                <div class="absolute bottom-12 right-8 text-xs bg-black/70 px-4 py-1 border border-pink-400 text-pink-300 rotate-[8deg]">
+                                    1962
+                                </div>
+                                
+                                <!-- scan effect -->
+                                <div class="absolute inset-0 bg-gradient-to-b from-transparent via-white/10 to-transparent animate-[scan_2.5s_linear_infinite]"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- caption -->
+                        <div class="mt-6 text-center">
+                            <span class="inline-block text-xs bg-zinc-800 text-pink-300 px-5 py-3 rounded-3xl border border-pink-400/30">
+                                ПАМЯТНИК ИНТЕРНЕТУ • МОСКВА • 2042
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- DESCRIPTION -->
+                <div class="flex-1 max-w-lg">
+                    <div class="text-emerald-400 text-sm mb-4 tracking-widest">АРТЕФАКТ ИЗ БУДУЩЕГО</div>
+                    <h2 class="text-4xl font-bold leading-tight neon-text-pink mb-8">
+                        ПАМЯТНИК<br>ИНТЕРНЕТУ
+                    </h2>
+                    <p class="text-zinc-400 leading-relaxed">
+                        В 2042 году в центре цифрового района Москвы был установлен монумент, 
+                        посвященный рождению глобальной сети. Сфера из прозрачного квантового стекла 
+                        пульсирует данными, символизируя непрерывный поток информации, 
+                        который связывает человечество.
+                    </p>
+                    
+                    <div class="mt-12 flex items-center gap-3">
+                        <div class="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-b from-cyan-200 to-transparent">∞</div>
+                        <div class="text-xs leading-tight">
+                            СЕТЬ<br>
+                            <span class="text-cyan-400">НИКОГДА НЕ СПИТ</span>
+                        </div>
+                    </div>
+                    
+                    <button onclick="triggerGlitch(this)" 
+                            class="mt-16 text-xs border-2 border-dashed border-cyan-400 hover:border-pink-400 px-8 py-5 transition-colors">
+                        АКТИВИРОВАТЬ ГОЛОГРАММУ →
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PIONEERS GRID -->
+    <section id="pioneers" class="py-20 bg-zinc-900 relative">
+        <div class="max-w-screen-2xl mx-auto px-8">
+            <div class="flex justify-between items-baseline mb-12">
+                <div>
+                    <span class="text-xs tracking-widest text-pink-400">03 • КОМАНДА</span>
+                    <h2 class="text-5xl font-bold neon-text">ОНИ ПРИДУМАЛИ ИНТЕРНЕТ</h2>
+                </div>
+                <a onclick="smoothScrollTo('history')" 
+                   class="flex items-center text-xs gap-x-3 text-cyan-400 hover:text-white transition-colors">
+                    <span>ПОДРОБНЕЕ В ИСТОРИИ</span> 
+                    <span class="text-3xl leading-none">→</span>
+                </a>
+            </div>
+            
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-6" id="pioneer-grid">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- DETAILED HISTORY / BIOS -->
+    <section id="history" class="bg-black py-20">
+        <div class="max-w-screen-2xl mx-auto px-8">
+            
+            <!-- FORSTER -->
+            <div class="grid grid-cols-12 gap-8 mb-24">
+                <div class="col-span-12 lg:col-span-5">
+                    <div class="lg:sticky lg:top-28">
+                        <div class="flex items-center gap-x-4 mb-6">
+                            <div class="w-12 h-12 bg-orange-300 text-orange-950 rounded-2xl flex items-center justify-center text-4xl">📖</div>
+                            <div>
+                                <div class="text-xs text-orange-300">ПИСАТЕЛЬ • 1879-1970</div>
+                                <h3 onclick="highlightPioneer(0)" class="text-4xl font-bold cursor-pointer neon-text-pink">ЭДВАРД МОРГАН ФОРСТЕР</h3>
+                            </div>
+                        </div>
+                        
+                        <div class="bio-line my-8"></div>
+                        
+                        <div class="text-xs uppercase text-zinc-400 mb-2">ПРОРОЧЕСТВО</div>
+                        <div class="text-zinc-400 text-sm">
+                            Его повесть «Машина останавливается» (1909) предсказала многие аспекты современного цифрового общества.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-span-12 lg:col-span-7">
+                    <div class="terminal p-8 text-sm leading-relaxed text-zinc-200">
+                        Английский писатель более ста лет назад описал в повести "Машина останавливается” будущее общества, которое виделось ему совершенно безрадостным. 
+                        «…Мир изменился до неузнаваемости. На поверхности планеты не осталось ни одной живой души. Человечество теперь живет под землей, в маленьких комнатах-сотах, 
+                        напичканных самыми передовыми достижениями техники. Все необходимое - под рукой, в буквальном смысле. Люди получили доступ к неограниченным возможностям 
+                        для общения друг с другом. Стоит нажать на кнопку - и можно поговорить с кем угодно из своих друзей, родственников, приятелей, с любым человеком из любой точки 
+                        земного шара. А личного общения больше нет, такое явление просто исчезло само собой. Больше нет нужды ехать к кому-то в гости или вообще встречаться лично 
+                        с другими людьми! Это ли не счастье?...» Конечно, антиутопия Форстера гротескна, депрессивна и мрачна. Но ведь не секрет, что интернет и социальные сети, 
+                        хоть и упростили нашу жизнь, отдалили нас друг от друга.
+                    </div>
+                </div>
+            </div>
+            
+            <!-- LICKLIDER -->
+            <div class="grid grid-cols-12 gap-8 mb-24">
+                <div class="col-span-12 lg:col-span-5 lg:order-2">
+                    <div class="lg:sticky lg:top-28">
+                        <div class="flex items-center gap-x-4 mb-6 justify-end">
+                            <div class="text-right">
+                                <div class="text-xs text-sky-300">УЧЕНЫЙ • 1915-1990</div>
+                                <h3 onclick="highlightPioneer(1)" class="text-4xl font-bold cursor-pointer neon-text">ДЖОЗЕФ ЛИКЛАЙДЕР</h3>
+                            </div>
+                            <div class="w-12 h-12 bg-sky-300 text-sky-950 rounded-2xl flex items-center justify-center text-4xl">🧠</div>
+                        </div>
+                        
+                        <div class="bio-line my-8"></div>
+                        
+                        <div class="text-xs uppercase text-zinc-400 mb-2 text-right">ГАЛАКТИЧЕСКАЯ СЕТЬ</div>
+                        <div class="text-zinc-400 text-sm text-right">
+                            В 1962 году описал концепцию «Галактической сети», которая легла в основу ARPANET.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-span-12 lg:col-span-7 lg:order-1">
+                    <div class="terminal p-8 text-sm leading-relaxed text-zinc-200">
+                        Впервые идеи и проекты глобальной компьютерной сети появляются в начале 1960-х годов. В 1962 году в США Джозеф Ликлайдер, который работал тогда в 
+                        Массачусетском технологическом институте, выпустил серию заметок, в котором описал концепцию «Галактической сети». Название было шуточным, и главное 
+                        назначение этой сети Ликлайдер видел в удобном обмене данными и программным кодом, но его концепция действительно описывала некоторые принципы глобальной 
+                        компьютерной сети, напоминавшей современный интернет. Вскоре Ликладйер стал руководителем отдела информационных технологий ДАРПА, и во многом благодаря 
+                        его усилиями через некоторое время это агентство начинает реализацию проекта одной из первых компьютерных сетей АРПАНЕТ.
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CERF -->
+            <div class="grid grid-cols-12 gap-8 mb-24">
+                <div class="col-span-12 lg:col-span-5">
+                    <div class="lg:sticky lg:top-28">
+                        <div class="flex items-center gap-x-4 mb-6">
+                            <div class="w-12 h-12 bg-violet-300 text-violet-950 rounded-2xl flex items-center justify-center text-4xl">📡</div>
+                            <div>
+                                <div class="text-xs text-violet-300">УЧЕНЫЙ • 1943-НАШИ ДНИ</div>
+                                <h3 onclick="highlightPioneer(2)" class="text-4xl font-bold cursor-pointer neon-text-pink">ВИНТОН СЕРФ</h3>
+                            </div>
+                        </div>
+                        
+                        <div class="bio-line my-8"></div>
+                        
+                        <div class="text-xs uppercase text-zinc-400 mb-2">ОТЕЦ ИНТЕРНЕТА</div>
+                        <div class="text-zinc-400 text-sm">
+                            Соавтор TCP/IP — протокола, который до сих пор используется в Интернете.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-span-12 lg:col-span-7">
+                    <div class="terminal p-8 text-sm leading-relaxed text-zinc-200">
+                        Разнообразие аппаратного и программного обеспечения создавало огромные трудности для объединения компьютеров в сеть. Винтон Серф создал универсальный 
+                        протокол обмена информацией, который позволил бы объединить между собой самые разные компьютеры и локальные сети. Протокол был назван TCP (англ. 
+                        Transmission-Control Protocol, или Протокол контроля передачи). Позже протокол был разделён на две части и получил название TCP/IP (IP — интернет-протокол), 
+                        тогда же появилось слово «интернет».
+                    </div>
+                </div>
+            </div>
+            
+            <!-- BERNERS-LEE -->
+            <div class="grid grid-cols-12 gap-8">
+                <div class="col-span-12 lg:col-span-5 lg:order-2">
+                    <div class="lg:sticky lg:top-28">
+                        <div class="flex items-center gap-x-4 mb-6 justify-end">
+                            <div class="text-right">
+                                <div class="text-xs text-amber-300">ИЗОБРЕТАТЕЛЬ • 1955-НАШИ ДНИ</div>
+                                <h3 onclick="highlightPioneer(3)" class="text-4xl font-bold cursor-pointer neon-text">ТИМ БЕРНЕРС-ЛИ</h3>
+                            </div>
+                            <div class="w-12 h-12 bg-amber-300 text-amber-950 rounded-2xl flex items-center justify-center text-4xl">🕸️</div>
+                        </div>
+                        
+                        <div class="bio-line my-8"></div>
+                        
+                        <div class="text-xs uppercase text-zinc-400 mb-2 text-right">WWW</div>
+                        <div class="text-zinc-400 text-sm text-right">
+                            Создатель World Wide Web, HTTP, HTML и первого веб-сайта.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-span-12 lg:col-span-7 lg:order-1">
+                    <div class="terminal p-8 text-sm leading-relaxed text-zinc-200">
+                        Создателем первого сайта стал Сэр Тимоти Джон Бернерс-Ли. Перед тем, как разработать и запустить первый интернет-сайт, британский ученый разработал URL, 
+                        протокол HTTP, язык HTML и, собственно, сам Интернет. К его достижениям также относится внедрение семантических моделей в протоколы Всемирной Сети. 
+                        В работе над этими масштабными проектами, изменившими наш мир, ему помогал Роберт Кайон. На данный момент Тим Бернерс-Ли управляет Консорциумом 
+                        Всемирной паутины.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-zinc-950 border-t-2 border-pink-500">
+        <div class="max-w-screen-2xl mx-auto px-8 pt-16 pb-8">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-y-10">
+                <div class="flex items-center gap-x-6">
+                    <div class="text-xs leading-tight">
+                        <div class="text-cyan-400">СОЗДАНО В СТИЛЕ</div>
+                        <div class="font-black text-4xl text-white tracking-tighter neon-text">CYBER</div>
+                    </div>
+                    <div class="h-10 w-px bg-white/30"></div>
+                    <div>
+                        <div class="text-[10px] text-zinc-400">ПРОЕКТ ДЛЯ ДЕМОНСТРАЦИИ</div>
+                        <div class="text-xs text-pink-400">1984 • 2024</div>
+                    </div>
+                </div>
+                
+                <div class="text-center">
+                    <div onclick="fireworks()" 
+                         class="cursor-pointer mx-auto mb-6 text-5xl hover:scale-110 transition-transform">🌐</div>
+                    <div class="text-[10px] max-w-[210px] text-zinc-500">
+                        Этот сайт — цифровая дань уважения пионерам, которые превратили фантазию в реальность
+                    </div>
+                </div>
+                
+                <div class="flex flex-col items-end text-xs gap-y-1 text-right">
+                    <div class="flex items-center gap-x-2">
+                        <span class="text-emerald-400">ONLINE</span>
+                        <span class="relative flex h-2 w-2">
+                            <span class="animate-ping absolute inline-flex h-2 w-2 rounded-full bg-emerald-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
+                        </span>
+                    </div>
+                    <div class="text-zinc-400">НИКТО НЕ ВЛАДЕЕТ ИНТЕРНЕТОМ</div>
+                    <div class="text-zinc-500">НО МЫ ВСЕ ЕГО ИСПОЛЬЗУЕМ</div>
+                </div>
+            </div>
+            
+            <div class="pt-16 mt-16 border-t border-white/10 text-[10px] flex flex-wrap justify-between text-zinc-500">
+                <div>© НЕСУЩЕСТВУЮЩАЯ КОРПОРАЦИЯ «НЕОНОВЫЙ СЕТЕВОЙ УЗЕЛ»</div>
+                <div class="flex items-center gap-x-6">
+                    <div class="cursor-pointer hover:text-cyan-400 transition-colors" onclick="showCredits()">CREDITS</div>
+                    <div class="cursor-pointer hover:text-cyan-400 transition-colors">PRIVACY.TXT</div>
+                    <div class="cursor-pointer hover:text-cyan-400 transition-colors">LOG.OUT</div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- PIONEER MODAL -->
+    <div onclick="if(event.target.id === 'modal-backdrop') hideModal()" id="modal-backdrop"
+         class="hidden fixed inset-0 bg-black/80 backdrop-blur-xl z-[9999] flex items-center justify-center">
+        <div onclick="event.stopImmediatePropagation()" 
+             class="max-w-lg w-full mx-4 bg-zinc-900 border border-cyan-400 rounded-3xl overflow-hidden">
+            
+            <!-- modal header -->
+            <div class="px-8 pt-8 pb-4 bg-black flex items-center justify-between">
+                <div id="modal-name" class="text-3xl font-bold text-cyan-300"></div>
+                <div onclick="hideModal()" 
+                     class="w-8 h-8 flex items-center justify-center text-4xl leading-none text-pink-400 cursor-pointer hover:rotate-90 transition-transform">×</div>
+            </div>
+            
+            <div class="p-8" id="modal-content">
+                <!-- JS injected -->
+            </div>
+            
+            <div class="px-8 py-6 bg-black border-t border-cyan-900 flex justify-end">
+                <button onclick="hideModal()" 
+                        class="uppercase text-xs px-10 py-5 border border-pink-400 text-pink-400 hover:bg-pink-500 hover:text-white transition-all">
+                    ЗАКРЫТЬ КАНАЛ
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tailwind script run
+        function initializeTailwind() {
+            tailwind.config = {
+                content: [],
+                theme: {
+                    extend: {}
+                }
+            }
+        }
+        
+        // Canvas network
+        let canvas, ctx, particles = [];
+        
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 0.6;
+                this.vy = (Math.random() - 0.5) * 0.6;
+                this.radius = Math.random() * 3 + 1.5;
+            }
+            
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+            }
+            
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = '#67e8f9';
+                ctx.shadowBlur = 12;
+                ctx.shadowColor = '#67e8f9';
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            }
+        }
+        
+        function connectParticles() {
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 160) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(103, 232, 249, ${0.6 - distance / 300})`;
+                        ctx.lineWidth = 1;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+        
+        function animateNetwork() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // faint grid
+            ctx.strokeStyle = 'rgba(16, 185, 129, 0.1)';
+            ctx.lineWidth = 1;
+            for (let x = 40; x < canvas.width; x += 40) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, canvas.height);
+                ctx.stroke();
+            }
+            for (let y = 40; y < canvas.height; y += 40) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(canvas.width, y);
+                ctx.stroke();
+            }
+            
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+            }
+            
+            connectParticles();
+            
+            // random extra pulses
+            if (Math.random() > 0.96) {
+                ctx.fillStyle = 'rgba(244, 63, 94, 0.3)';
+                ctx.beginPath();
+                ctx.arc(
+                    Math.random() * canvas.width, 
+                    Math.random() * canvas.height, 
+                    18, 0, Math.PI * 2
+                );
+                ctx.fill();
+            }
+            
+            requestAnimationFrame(animateNetwork);
+        }
+        
+        function resizeCanvas() {
+            if (!canvas) return;
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight * 0.9;
+        }
+        
+        // Pioneer data
+        const pioneers = [
+            {
+                id: 0,
+                name: "ЭДВАРД МОРГАН ФОРСТЕР",
+                role: "Английский писатель",
+                emoji: "📖",
+                color: "orange",
+                year: "1879 — 1970",
+                description: "Предсказал цифровое будущее в своей антиутопии «Машина останавливается» в 1909 году.",
+                fullBio: "Английский писатель более ста лет назад описал в повести 'Машина останавливается' будущее общества, которое виделось ему совершенно безрадостным. Он описал мир, в котором люди живут под землей, общаются только через машины и забыли, что такое настоящее общение."
+            },
+            {
+                id: 1,
+                name: "ДЖОЗЕФ ЛИКЛАЙДЕР",
+                role: "Американский ученый",
+                emoji: "🧪",
+                color: "sky",
+                year: "1915 — 1990",
+                description: "Предложил концепцию «Галактической сети» — предшественницу современного Интернета.",
+                fullBio: "В 1962 году выпустил серию заметок с концепцией «Галактической сети». Позже возглавил отдел информационных технологий DARPA и способствовал созданию ARPANET."
+            },
+            {
+                id: 2,
+                name: "ВИНТОН СЕРФ",
+                role: "Американский ученый",
+                emoji: "📡",
+                color: "violet",
+                year: "1943 — н.в.",
+                description: "Соавтор протокола TCP/IP — основы современного Интернета.",
+                fullBio: "Создал универсальный протокол TCP/IP, позволивший объединить различные сети. Его часто называют одним из «отцов Интернета»."
+            },
+            {
+                id: 3,
+                name: "ТИМ БЕРНЕРС-ЛИ",
+                role: "Британский изобретатель",
+                emoji: "🕸️",
+                color: "amber",
+                year: "1955 — н.в.",
+                description: "Изобретатель World Wide Web, HTTP, HTML и первого веб-сайта.",
+                fullBio: "Разработал URL, HTTP, HTML. Запустил первый веб-сайт в 1990 году. Сегодня возглавляет Консорциум Всемирной паутины и борется за открытый и свободный интернет."
+            }
+        ];
+        
+        function createPioneerCards() {
+            const container = document.getElementById("pioneer-grid");
+            container.innerHTML = '';
+            
+            pioneers.forEach((pioneer, index) => {
+                const cardHTML = `
+                <div onclick="showPioneerModal(${index}); highlightPioneer(${index});" 
+                     class="card-hover bg-zinc-950 border border-zinc-700 hover:border-${pioneer.color}-400 rounded-3xl overflow-hidden cursor-pointer group">
+                    <div class="h-2 bg-gradient-to-r from-transparent via-${pioneer.color}-400 to-transparent"></div>
+                    <div class="p-6">
+                        <div class="w-16 h-16 mx-auto mb-6 rounded-2xl bg-zinc-800 flex items-center justify-center text-5xl transition-all group-active:scale-125 border border-zinc-700 group-hover:border-${pioneer.color}-400">
+                            ${pioneer.emoji}
+                        </div>
+                        <div class="text-center">
+                            <div class="text-xs text-${pioneer.color}-400 mb-1">${pioneer.year}</div>
+                            <div class="font-bold text-xl text-white mb-1">${pioneer.name}</div>
+                            <div class="text-xs text-zinc-400">${pioneer.role}</div>
+                        </div>
+                    </div>
+                    <div class="px-6 py-5 bg-black/60 text-center text-[10px] text-zinc-400 border-t border-zinc-800 group-hover:text-${pioneer.color}-300 transition-colors">
+                        ${pioneer.description}
+                    </div>
+                </div>`;
+                
+                container.innerHTML += cardHTML;
+            });
+        }
+        
+        let currentModalIndex = 0;
+        
+        function showPioneerModal(index) {
+            currentModalIndex = index;
+            const pioneer = pioneers[index];
+            const modal = document.getElementById("modal-backdrop");
+            const nameContainer = document.getElementById("modal-name");
+            const contentContainer = document.getElementById("modal-content");
+            
+            nameContainer.textContent = pioneer.name;
+            nameContainer.className = `text-3xl font-bold text-${pioneer.color}-300`;
+            
+            contentContainer.innerHTML = `
+                <div class="flex justify-center mb-8">
+                    <div class="inline-flex items-center justify-center text-8xl h-36 w-36 bg-zinc-800 rounded-3xl border-4 border-${pioneer.color}-300 shadow-inner">
+                        ${pioneer.emoji}
+                    </div>
+                </div>
+                <div class="flex justify-between items-center mb-8 border-b border-dashed border-zinc-700 pb-6">
+                    <div>
+                        <div class="text-xs text-zinc-400">РОЛЬ</div>
+                        <div class="text-white">${pioneer.role}</div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-xs text-zinc-400">ГОДЫ</div>
+                        <div class="text-white">${pioneer.year}</div>
+                    </div>
+                </div>
+                <div class="text-zinc-300 text-sm leading-relaxed">
+                    ${pioneer.fullBio}
+                </div>
+                <div class="my-8 flex justify-center">
+                    <div onclick="nextPioneer()" 
+                         class="cursor-pointer text-xs flex items-center gap-x-2 text-pink-400 hover:text-white">
+                        <span>СЛЕДУЮЩИЙ УЗЕЛ</span>
+                        <span class="text-xl">→</span>
+                    </div>
+                </div>
+            `;
+            
+            modal.classList.remove("hidden");
+            modal.classList.add("flex");
+            
+            // disable scroll on body
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function hideModal() {
+            const modal = document.getElementById("modal-backdrop");
+            modal.classList.add("hidden");
+            modal.classList.remove("flex");
+            document.body.style.overflow = 'visible';
+        }
+        
+        function nextPioneer() {
+            let next = currentModalIndex + 1;
+            if (next > 3) next = 0;
+            hideModal();
+            // give time to close
+            setTimeout(() => {
+                showPioneerModal(next);
+            }, 280);
+        }
+        
+        function highlightPioneer(index) {
+            const cards = document.querySelectorAll("#pioneer-grid > div");
+            cards.forEach((card, i) => {
+                if (i === index) {
+                    card.style.borderColor = 'rgb(251 113 133)';
+                    setTimeout(() => {
+                        card.style.borderColor = '';
+                    }, 1800);
+                }
+            });
+        }
+        
+        function showInfoModal() {
+            const modal = document.getElementById("modal-backdrop");
+            const nameContainer = document.getElementById("modal-name");
+            const contentContainer = document.getElementById("modal-content");
+            
+            nameContainer.innerHTML = `
+                <span class="text-cyan-300">ИНФОРМАЦИЯ</span>
+                <span class="block text-xs text-zinc-400 text-base mt-2 font-normal">О ПРОЕКТЕ</span>
+            `;
+            nameContainer.className = "text-3xl font-bold text-cyan-300";
+            
+            contentContainer.innerHTML = `
+                <div class="space-y-6 text-xs">
+                    <p class="leading-relaxed text-zinc-300">
+                        Сайт создан в киберпанковском стиле с использованием HTML, CSS и JavaScript. 
+                        Он посвящен пионерам, которые стояли у истоков Интернета.
+                    </p>
+                    <div class="grid grid-cols-2 gap-6 text-[10px]">
+                        <div class="bg-zinc-950 p-4 rounded-2xl border border-cyan-900">
+                            <div class="text-cyan-400 mb-4">ТЕХНОЛОГИИ</div>
+                            <div class="space-y-4">
+                                <div class="flex justify-between"><span class="text-zinc-400">CANVAS</span><span class="text-emerald-400">NETWORK</span></div>
+                                <div class="flex justify-between"><span class="text-zinc-400">TAILWIND</span><span class="text-emerald-400">CSS</span></div>
+                                <div class="flex justify-between"><span class="text-zinc-400">GLITCH</span><span class="text-emerald-400">EFFECTS</span></div>
+                            </div>
+                        </div>
+                        <div class="bg-zinc-950 p-4 rounded-2xl border border-pink-900">
+                            <div class="text-pink-400 mb-4">ФАКТЫ</div>
+                            <ul class="space-y-4 text-zinc-300">
+                                <li class="flex gap-x-3 items-start">
+                                    <span class="inline-block w-2 h-2 mt-1.5 bg-pink-400 rounded-full"></span>
+                                    <span>Первый сайт запущен 13 ноября 1990</span>
+                                </li>
+                                <li class="flex gap-x-3 items-start">
+                                    <span class="inline-block w-2 h-2 mt-1.5 bg-pink-400 rounded-full"></span>
+                                    <span>TCP/IP — основа Интернета</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div onclick="hideModal()" class="block text-center py-4 text-pink-400 hover:text-white cursor-pointer text-xs tracking-widest border border-dashed border-pink-400">
+                        ВЕРНУТЬСЯ В СЕТЬ
+                    </div>
+                </div>
+            `;
+            
+            modal.classList.remove("hidden");
+            modal.classList.add("flex");
+        }
+        
+        function showCredits() {
+            hideModal();
+            setTimeout(() => {
+                const modal = document.getElementById("modal-backdrop");
+                const nameContainer = document.getElementById("modal-name");
+                const contentContainer = document.getElementById("modal-content");
+                
+                nameContainer.textContent = "CREDITS";
+                nameContainer.className = "text-3xl font-bold text-emerald-400";
+                
+                contentContainer.innerHTML = `
+                    <div class="text-center text-xs space-y-8 py-4">
+                        <div>
+                            <div class="text-zinc-400">ДИЗАЙН И КОД</div>
+                            <div class="text-2xl text-white mt-2">ИИ-АССИСТЕНТ</div>
+                        </div>
+                        <div class="h-px bg-white/10"></div>
+                        <div class="text-[10px] max-w-[260px] mx-auto text-zinc-400">
+                            Вдохновлено киберпанком, фильмом «Бегущий по лезвию», 
+                            сериалом «Мистер Робот» и реальной историей интернета.
+                        </div>
+                        <div onclick="hideModal()" 
+                             class="mx-auto text-xs border border-emerald-400 text-emerald-400 hover:bg-emerald-400 hover:text-black transition-colors px-7 py-4 inline-block rounded-3xl cursor-pointer">
+                            ЗАКРЫТЬ ТЕРМИНАЛ
+                        </div>
+                    </div>
+                `;
+                modal.classList.remove("hidden");
+                modal.classList.add("flex");
+            }, 100);
+        }
+        
+        function pulseMonument(el) {
+            el.style.transform = 'scale(1.4)';
+            el.style.filter = 'hue-rotate(220deg)';
+            setTimeout(() => {
+                el.style.transform = 'scale(1)';
+                el.style.filter = '';
+            }, 520);
+            
+            // trigger some particles on canvas
+            if (canvas) {
+                for (let i = 0; i < 20; i++) {
+                    const p = new Particle();
+                    p.x = canvas.width / 2 + (Math.random() * 200 - 100);
+                    p.y = canvas.height / 4;
+                    p.vx = (Math.random() - 0.5) * 7;
+                    p.vy = (Math.random() - 0.5) * 7 - 3;
+                    particles.push(p);
+                    
+                    // remove after some time
+                    setTimeout(() => {
+                        const idx = particles.indexOf(p);
+                        if (idx > -1) particles.splice(idx, 1);
+                    }, 1200);
+                }
+            }
+        }
+        
+        function triggerGlitch(el) {
+            el.style.transitionDuration = '80ms';
+            el.style.transform = 'translate(3px, 2px)';
+            
+            setTimeout(() => {
+                el.style.transform = 'translate(-4px, -3px)';
+            }, 90);
+            
+            setTimeout(() => {
+                el.style.transform = 'translate(0, 0)';
+                el.style.transitionDuration = '300ms';
+            }, 400);
+            
+            const text = document.querySelector('.neon-text');
+            if (text) {
+                text.classList.add('glitch');
+                setTimeout(() => {
+                    text.classList.remove('glitch');
+                }, 1200);
+            }
+        }
+        
+        function smoothScrollTo(section) {
+            let el;
+            
+            switch(section) {
+                case 'intro':
+                    el = document.getElementById('intro');
+                    break;
+                case 'monument':
+                    el = document.getElementById('monument');
+                    break;
+                case 'pioneers':
+                    el = document.getElementById('pioneers');
+                    break;
+                case 'history':
+                    el = document.getElementById('history');
+                    break;
+                default:
+                    el = document.getElementById('intro');
+            }
+            
+            if (el) {
+                const navHeight = 90;
+                const topPos = el.getBoundingClientRect().top + window.scrollY - navHeight;
+                window.scrollTo({ top: topPos, behavior: "smooth" });
+            }
+        }
+        
+        let audioEnabled = false;
+        let oscillator = null;
+        let audioContext;
+        
+        function toggleSound() {
+            audioEnabled = !audioEnabled;
+            const icon = document.getElementById("sound-icon");
+            
+            if (audioEnabled) {
+                icon.innerHTML = `
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707A1 1 0 0113 6v12a1 1 0 01-1.707.707L5.586 15z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m-.5-15a3.5 3.5 0 10-7 0" />
+                `;
+                
+                try {
+                    if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    oscillator = audioContext.createOscillator();
+                    const gain = audioContext.createGain();
+                    
+                    oscillator.connect(gain);
+                    gain.connect(audioContext.destination);
+                    
+                    oscillator.frequency.setValueAtTime(120, audioContext.currentTime);
+                    gain.gain.value = 0.03;
+                    oscillator.type = 'sine';
+                    oscillator.start();
+                    
+                    // modulate frequency
+                    let t = 0;
+                    const modInterval = setInterval(() => {
+                        if (!audioEnabled) {
+                            clearInterval(modInterval);
+                            return;
+                        }
+                        t += 0.1;
+                        const freq = 120 + Math.sin(t) * 30;
+                        oscillator.frequency.setValueAtTime(freq, audioContext.currentTime);
+                    }, 220);
+                } catch(e) {}
+            } 
+            else {
+                icon.innerHTML = `
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707A1 1 0 0113 6v12a1 1 0 01-1.707.707L5.586 15z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a4 4 0 00-8 0" />
+                `;
+                if (oscillator) {
+                    try {
+                        oscillator.stop();
+                    } catch(e) {}
+                    oscillator = null;
+                }
+            }
+        }
+        
+        function fireworks() {
+            for (let i = 0; i < 30; i++) {
+                setTimeout(() => {
+                    if (canvas) {
+                        const p = new Particle();
+                        p.x = Math.random() * canvas.width;
+                        p.y = Math.random() * canvas.height * 0.6;
+                        p.vx = (Math.random() - 0.5) * 13;
+                        p.vy = (Math.random() - 0.5) * 13 - 3;
+                        p.radius = 6;
+                        particles.push(p);
+                        
+                        setTimeout(() => {
+                            const idx = particles.indexOf(p);
+                            if (idx !== -1) particles.splice(idx, 1);
+                        }, 900);
+                    }
+                }, i * 6);
+            }
+        }
+        
+        // Keyboard shortcuts
+        function handleKeys(e) {
+            if (e.metaKey && e.key === "k") {
+                e.preventDefault();
+                fireworks();
+            }
+            
+            if (e.key === "/" && document.getElementById("modal-backdrop").classList.contains("hidden")) {
+                showInfoModal();
+            }
+        }
+        
+        // Main initialization
+        function initialize() {
+            initializeTailwind();
+            
+            // Tailwind script already included via CDN
+            canvas = document.getElementById("hero-canvas");
+            if (canvas) {
+                ctx = canvas.getContext("2d");
+                resizeCanvas();
+                window.addEventListener("resize", resizeCanvas);
+                
+                // populate particles
+                for (let i = 0; i < 110; i++) {
+                    particles.push(new Particle());
+                }
+                
+                // start animation
+                animateNetwork();
+            }
+            
+            // create pioneer cards
+            createPioneerCards();
+            
+            // keyboard
+            document.addEventListener('keydown', handleKeys);
+            
+            // demo pulse on monument after 2100ms
+            setTimeout(() => {
+                const monument = document.querySelector('.w-28.h-28');
+                if (monument) pulseMonument(monument);
+            }, 2100);
+            
+            // random canvas burst every 8 seconds
+            setInterval(() => {
+                if (Math.random() > 0.6 && canvas) {
+                    for (let i = 0; i < 15; i++) {
+                        const p = new Particle();
+                        p.x = canvas.width * Math.random();
+                        p.y = canvas.height * Math.random();
+                        particles.push(p);
+                        setTimeout(() => {
+                            const idx = particles.indexOf(p);
+                            if (idx > -1) particles.splice(idx, 1);
+                        }, 2200);
+                    }
+                }
+            }, 8000);
+            
+            // make the page feel alive
+            console.log('%cОни придумали Интернет — кибер-панковский интерактивный мемориал загружен успешно.', 'font-family:monospace;color:#22f0ff;font-size:10px');
+        }
+        
+        // Boot the system
+        window.onload = initialize;
+    </script>
+</body>
+</html>
